@@ -1,6 +1,6 @@
 # supabase-hooks
 
-React hooks library for [Supabase]("https://github.com/supabase/supabase") ⭐
+React hooks library for [Supabase](https://github.com/supabase/supabase) ⭐
 
 # Install
 
