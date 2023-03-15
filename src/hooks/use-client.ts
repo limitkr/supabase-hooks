@@ -5,7 +5,7 @@ import { Context } from "../Provider";
 
 type CreateClientReturnType<T> = ReturnType<typeof createClient<T>>;
 
-const useClient = <Database = {}>(): CreateClientReturnType<Database> => {
+const useClient = <Database = any>(): CreateClientReturnType<Database> => {
   const supabaseClient = useContext(Context);
   if (!supabaseClient)
     throw new Error("useClient must be used withing a SHProvider!");
