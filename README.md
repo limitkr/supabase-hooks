@@ -95,7 +95,7 @@ Now you can run the test!
 
 ## `useClient<T>()`
 ```ts
-const useClient = <Database = {}>(): ReturnType<typeof createClient<T>>;
+const useClient = <D extends BaseDatabase>(): ReturnType<typeof createClient<D>>;
 ```
 
 ## `useDatabase<T>(from)`
