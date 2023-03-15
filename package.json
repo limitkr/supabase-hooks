@@ -1,6 +1,6 @@
 {
   "name": "@limitkr/supabase-hooks",
-  "version": "0.1.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "React hooks for supabase",
   "author": "YongIn Kim <limitkr99@gmail.com>",
   "homepage": "https://github.com/limitkr/supabase-hooks",

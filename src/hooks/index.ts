@@ -1,2 +1,5 @@
 export { default as useClient } from "./use-client";
-export { default as useDatabase } from "./use-database";
+
+// useDatabase
+export type { DeleteDataFn, InsertDataFn, UpdateDataFn } from "./use-database";
+export { useDatabase } from "./use-database";

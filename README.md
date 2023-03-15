@@ -94,13 +94,30 @@ Now you can run the test!
 # API
 
 ## `useClient<T>()`
+
 ```ts
-const useClient = <D extends BaseDatabase>(): ReturnType<typeof createClient<D>>;
+const useClient = <D extends BaseDatabase>() => ReturnType<typeof createClient<D>>;
 ```
+Returns the Supabase client.
 
 ## `useDatabase<T>(from)`
 ```ts
-const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>) => {
+const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>, options: { selectSingle?: boolean }) => {
   return { data, isLoading, insertData, updateData, deleteData };
 }
+```
+Returns 3 Supabase database methods: `insert`, `update`, `delete`. Returns 2 Variables: 
+
+- `isLoading` - Variable that indicate whether data is being loaded.
+- `data` - Retrieved data that Select a table using the 'key' value defined in the `from` parameter.
+
+### `from: TableKey<D> | string`
+The table name to operate on.
+> :information_source: If you use a database type extracted from 'Supabase' into the generic type, you can get a better type hint.
+
+### `options: { selectSingle?: boolean }`
+#### `selectSingle`
+If `true`, one single object type is returned, not an array type. This is the same method as below.
+```ts
+await supabaseClient.from(/* from */).select().single();
 ```
