@@ -4,9 +4,8 @@
 
 import "@testing-library/jest-dom";
 
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { render } from "@testing-library/react";
-import * as process from "process";
 import type { FC } from "react";
 
 import { SHProvider, useClient } from "../src";
