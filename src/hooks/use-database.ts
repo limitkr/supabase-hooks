@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import useSWR from "swr";
 
 import type { BaseDatabase, Table, TableKey } from "../types";
-import useClient from "./useClient";
+import useClient from "./use-client";
 
 const fetcher = async <D extends BaseDatabase>(
   url: TableKey<D>,

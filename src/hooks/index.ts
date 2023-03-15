@@ -1,2 +1,2 @@
-export { default as useClient } from "./useClient";
-export { default as useDatabase } from "./useDatabase";
+export { default as useClient } from "./use-client";
+export { default as useDatabase } from "./use-database";
