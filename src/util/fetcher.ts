@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
-import { BaseDatabase, Table, TableKey } from "../types";
+import type { BaseDatabase, Table, TableKey } from "../types";
 
 // TODO: allow selecting specific columns next version...
 export const fetcher = async <D extends BaseDatabase>(

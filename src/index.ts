@@ -1,3 +1,3 @@
 export * from "./hooks";
+export type { SHProviderProps } from "./Provider";
 export { default as SHProvider } from "./Provider";
-export { type ProviderProps } from "./Provider";

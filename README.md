@@ -103,10 +103,10 @@ Returns the Supabase client.
 ## `useDatabase<T>(from)`
 ```ts
 const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>, options: { selectSingle?: boolean }) => {
-  return { data, isLoading, insertData, updateData, deleteData };
+  return { data, isLoading, insertData, updateData, upsertData, deleteData };
 }
 ```
-Returns 3 Supabase database methods: `insert`, `update`, `delete`. Returns 2 Variables: 
+Returns 4 Supabase database methods: `insert`, `update`, `delete`, `upsert`. Returns 2 Variables: 
 
 - `isLoading` - Variable that indicate whether data is being loaded.
 - `data` - Retrieved data that Select a table using the 'key' value defined in the `from` parameter.

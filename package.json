@@ -1,14 +1,21 @@
 {
   "name": "@limitkr/supabase-hooks",
-  "version": "1.0.0-beta.2",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "version": "1.0.0-beta.3",
   "description": "React hooks for supabase",
   "author": "YongIn Kim <limitkr99@gmail.com>",
   "homepage": "https://github.com/limitkr/supabase-hooks",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "dev": "concurrently \"tsup src/index.ts --format esm,cjs --dts --external react --watch\"",
+    "clean": "rm -rf dist"
+  },
   "bugs": {
     "url": "https://github.com/limitkr/supabase-hooks/issues",
     "email": "limitkr99@gmail.com"
   },
-  "keywords": [],
+  "keywords": ["react", "react-hooks", "supabase", "supabase-hooks"],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -17,13 +24,6 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
-    "dev": "concurrently \"tsup src/index.ts --format esm,cjs --dts --external react --watch\"",
-    "clean": "rm -rf dist"
-  },
   "devDependencies": {
     "@supabase/postgrest-js": "^1.4.1",
     "@supabase/supabase-js": "^2.10.0",
