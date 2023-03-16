@@ -9,7 +9,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import React from "react";
 
 import { SHProvider, useDatabase } from "../src";
-import { Database } from "./util/test-database.types";
+import type { Database } from "./util";
 
 describe("Testing use-database hook", () => {
   const SUPABASE_URL = process.env.SUPABASE_URL;

@@ -1,26 +1,19 @@
-import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import useSWR from "swr";
 
-import type { BaseDatabase, CountStatement, Table, TableKey } from "../types";
-import { fetcher } from "../util";
-import useClient from "./use-client";
-
-export type InsertDataFn<D extends BaseDatabase, K extends TableKey<D>> = (
-  from: K,
-  data: Table<D, K, "Insert">,
-  { count }?: CountStatement
-) => PostgrestFilterBuilder<D["public"], Table<D, K, "Insert">, null>;
-
-export type UpdateDataFn<D extends BaseDatabase, K extends TableKey<D>> = (
-  from: K,
-  data: Table<D, K, "Update">,
-  { count }?: CountStatement
-) => PostgrestFilterBuilder<D["public"], Table<D, K, "Update">, null>;
-
-export type DeleteDataFn<D extends BaseDatabase, K extends TableKey<D>> = (
-  from: K,
-  { count }?: CountStatement
-) => PostgrestFilterBuilder<D["public"], Table<D, K, "Row">, null>;
+import type {
+  BaseDatabase,
+  CountStatement,
+  Table,
+  TableKey,
+} from "../../types";
+import { fetcher } from "../../util";
+import useClient from "../use-client";
+import type {
+  DeleteDataFn,
+  InsertDataFn,
+  UpdateDataFn,
+  UpsertDataFn,
+} from "./use-database.types";
 
 /**
  * Supabase Database hook.
@@ -31,14 +24,18 @@ export type DeleteDataFn<D extends BaseDatabase, K extends TableKey<D>> = (
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<D extends BaseDatabase>(
-  from: TableKey<D>
+export function useDatabase<
+  D extends BaseDatabase,
+  K extends TableKey<D> = string
+>(
+  from: K
 ): {
-  data: Array<Table<D, TableKey<D>, "Row">>;
+  data: Array<Table<D, K, "Row">>;
   isLoading: boolean;
-  insertData: InsertDataFn<D, TableKey<D>>;
-  updateData: UpdateDataFn<D, TableKey<D>>;
-  deleteData: DeleteDataFn<D, TableKey<D>>;
+  insertData: InsertDataFn<D, K>;
+  updateData: UpdateDataFn<D, K>;
+  deleteData: DeleteDataFn<D, K>;
+  upsertData: UpsertDataFn<D, K>;
 };
 
 /**
@@ -50,15 +47,19 @@ export function useDatabase<D extends BaseDatabase>(
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<D extends BaseDatabase>(
-  from: TableKey<D>,
+export function useDatabase<
+  D extends BaseDatabase,
+  K extends TableKey<D> = string
+>(
+  from: K,
   options: { selectSingle: true }
 ): {
-  data: Table<D, TableKey<D>, "Row">;
+  data: Table<D, K, "Row">;
   isLoading: boolean;
-  insertData: InsertDataFn<D, TableKey<D>>;
-  updateData: UpdateDataFn<D, TableKey<D>>;
-  deleteData: DeleteDataFn<D, TableKey<D>>;
+  insertData: InsertDataFn<D, K>;
+  updateData: UpdateDataFn<D, K>;
+  deleteData: DeleteDataFn<D, K>;
+  upsertData: UpsertDataFn<D, K>;
 };
 
 /**
@@ -80,17 +81,17 @@ export function useDatabase<D extends BaseDatabase>(
  * ``
  *
  */
-export function useDatabase<D extends BaseDatabase = any>(
-  from: TableKey<D>,
-  options: { selectSingle: boolean } = { selectSingle: false }
-) {
+export function useDatabase<
+  D extends BaseDatabase,
+  K extends TableKey<D> = string
+>(from: K, options: { selectSingle: boolean } = { selectSingle: false }) {
   const supabase = useClient<D>();
 
   const { data, isLoading } = useSWR(from as string, (url) =>
     fetcher<D>(url, supabase, options.selectSingle)
   );
 
-  const insertData = <K extends TableKey<D>>(
+  const insertData = (
     from: K,
     data: Table<D, K, "Insert">,
     { count }: CountStatement = { count: undefined }
@@ -98,7 +99,7 @@ export function useDatabase<D extends BaseDatabase = any>(
     return supabase.from(from as string).insert({ ...data }, { count });
   };
 
-  const updateData = <K extends TableKey<D>>(
+  const updateData = (
     from: K,
     data: Table<D, K, "Update">,
     { count }: CountStatement = { count: undefined }
@@ -106,12 +107,20 @@ export function useDatabase<D extends BaseDatabase = any>(
     return supabase.from(from as string).update({ ...data }, { count });
   };
 
-  const deleteData = <K extends TableKey<D>>(
+  const upsertData = (
+    from: K,
+    data: Table<D, K, "Update">,
+    { count }: CountStatement = { count: undefined }
+  ): ReturnType<UpsertDataFn<D, K>> => {
+    return supabase.from(from as string).upsert({ ...data }, { count });
+  };
+
+  const deleteData = (
     from: K,
     { count }: CountStatement = { count: undefined }
   ): ReturnType<DeleteDataFn<D, K>> => {
     return supabase.from(from as string).delete({ count });
   };
 
-  return { data, isLoading, insertData, updateData, deleteData };
+  return { data, isLoading, insertData, updateData, upsertData, deleteData };
 }
