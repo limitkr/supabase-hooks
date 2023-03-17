@@ -44,5 +44,5 @@ export type Table<
 > = ExtractTable<SupabaseTables<D>, K>[Statement];
 
 export type CountStatement = {
-  count?: "exact" | "planned" | "estimated";
+  count?: "exact" | "planned" | "estimated" | undefined;
 };

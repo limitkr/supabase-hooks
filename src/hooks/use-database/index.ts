@@ -4,4 +4,5 @@ export type {
   InsertDataFn,
   UpdateDataFn,
   UpsertDataFn,
+  UseDatabaseOptions,
 } from "./use-database.types";
