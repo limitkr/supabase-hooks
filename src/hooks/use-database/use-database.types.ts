@@ -1,6 +1,9 @@
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 import { BaseDatabase, CountStatement, Table, TableKey } from "../../types";
+import { SWRFetcherOptions } from "../../util/fetcher.types";
+
+export type UseDatabaseOptions = SWRFetcherOptions;
 
 export type InsertDataFn<D extends BaseDatabase, K extends TableKey<D>> = (
   from: K,

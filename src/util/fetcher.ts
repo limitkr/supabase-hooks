@@ -1,14 +1,15 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { BaseDatabase, Table, TableKey } from "../types";
+import type { SWRFetcherOptions } from "./fetcher.types";
 
 // TODO: allow selecting specific columns next version...
 export const fetcher = async <D extends BaseDatabase>(
   url: TableKey<D>,
   client: SupabaseClient<D>,
-  selectSingle: boolean
+  options: SWRFetcherOptions
 ) => {
-  if (selectSingle) {
+  if (options?.selectSingle) {
     const { data, error } = await client
       .from(url as string)
       .select()
