@@ -13,6 +13,7 @@ import type {
   InsertDataFn,
   UpdateDataFn,
   UpsertDataFn,
+  UseDatabaseOptions,
 } from "./use-database.types";
 
 /**
@@ -20,22 +21,18 @@ import type {
  *
  * the `data` is returned in object array format.
  * @param from - The table name to operate on.
- * @param options - Database fetch options.
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<
-  D extends BaseDatabase,
-  K extends TableKey<D> = string
->(
-  from: K
+export function useDatabase<D extends BaseDatabase>(
+  from: TableKey<D>
 ): {
-  data: Array<Table<D, K, "Row">>;
+  data: Array<Table<D, TableKey<D>, "Row">>;
   isLoading: boolean;
-  insertData: InsertDataFn<D, K>;
-  updateData: UpdateDataFn<D, K>;
-  deleteData: DeleteDataFn<D, K>;
-  upsertData: UpsertDataFn<D, K>;
+  insertData: InsertDataFn<D, TableKey<D>>;
+  updateData: UpdateDataFn<D, TableKey<D>>;
+  deleteData: DeleteDataFn<D, TableKey<D>>;
+  upsertData: UpsertDataFn<D, TableKey<D>>;
 };
 
 /**
@@ -47,19 +44,16 @@ export function useDatabase<
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<
-  D extends BaseDatabase,
-  K extends TableKey<D> = string
->(
-  from: K,
-  options: { selectSingle: true }
+export function useDatabase<D extends BaseDatabase>(
+  from: TableKey<D>,
+  options?: { selectSingle: true }
 ): {
-  data: Table<D, K, "Row">;
+  data: Table<D, TableKey<D>, "Row">;
   isLoading: boolean;
-  insertData: InsertDataFn<D, K>;
-  updateData: UpdateDataFn<D, K>;
-  deleteData: DeleteDataFn<D, K>;
-  upsertData: UpsertDataFn<D, K>;
+  insertData: InsertDataFn<D, TableKey<D>>;
+  updateData: UpdateDataFn<D, TableKey<D>>;
+  deleteData: DeleteDataFn<D, TableKey<D>>;
+  upsertData: UpsertDataFn<D, TableKey<D>>;
 };
 
 /**
@@ -83,12 +77,12 @@ export function useDatabase<
  */
 export function useDatabase<
   D extends BaseDatabase,
-  K extends TableKey<D> = string
->(from: K, options: { selectSingle: boolean } = { selectSingle: false }) {
+  K extends TableKey<D> = TableKey<D>
+>(from: K, options?: UseDatabaseOptions) {
   const supabase = useClient<D>();
 
   const { data, isLoading } = useSWR(from as string, (url) =>
-    fetcher<D>(url, supabase, options.selectSingle)
+    fetcher<D>(url, supabase, { selectSingle: options?.selectSingle })
   );
 
   const insertData = (
