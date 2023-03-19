@@ -84,10 +84,16 @@ mkdir .jest
 ```
 And then create the *setEnvVar.js* file in the folder. assign the env variables in the *setEnvVar.js*.
 
-```ts
+```js
+// .jest/setEnvVar.js
+
 process.env.SUPABASE_URL = /* Your Supabase URL */
 process.env.SUPABASE_ANON_KEY = /* Your Supabase Key */
 ```
+
+And create new empty supabase instance for testing, and create a new table like the image below.
+
+<img width="669" alt="create table example" src="https://user-images.githubusercontent.com/51485489/225901028-8f1b00e8-cc8d-4c16-a316-a3dfdfecd4a8.png">
 
 Now you can run the test!
 
@@ -102,21 +108,41 @@ Returns the Supabase client.
 
 ## `useDatabase<T>(from)`
 ```ts
-const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>, options: { selectSingle?: boolean }) => {
+const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>, options: UseDatabaseOptions) => {
   return { data, isLoading, insertData, updateData, upsertData, deleteData };
 }
 ```
 Returns 4 Supabase database methods: `insert`, `update`, `delete`, `upsert`. Returns 2 Variables: 
 
 - `isLoading` - Variable that indicate whether data is being loaded.
-- `data` - Retrieved data that Select a table using the 'key' value defined in the `from` parameter.
+- `data` - fetched data that Select a table using the 'key' value defined in the `from` parameter.
+
+You can use filtering in some database methods. For example, to delete data when a specific ID matches:
+```tsx
+import { useDatabase } from "@limitkr/supabase-hooks";
+
+export default function Example() {
+   const { deleteData } = useDatabase("posts");
+   
+   return (
+     <button onClick={async () => await deleteData.eq("id", 1)}>Delete</button>
+   )
+}
+```
+
+> :warning: In the data fetch(`select`) method, filtering options will be added soon.
 
 ### `from: TableKey<D> | string`
 The table name to operate on.
 > :information_source: If you use a database type extracted from 'Supabase' into the generic type, you can get a better type hint.
 
-### `options: { selectSingle?: boolean }`
-#### `selectSingle`
+### `options: UseDatabaseOptions`
+```ts
+interface UseDatabaseOptions {
+  selectSingle?: boolean;
+}
+```
+#### `selectSingle: boolean`
 If `true`, one single object type is returned, not an array type. This is the same method as below.
 ```ts
 await supabaseClient.from(/* from */).select().single();

@@ -16,16 +16,22 @@ import type {
   UseDatabaseOptions,
 } from "./use-database.types";
 
+interface UseSingleSelect extends UseDatabaseOptions {
+  selectSingle: true;
+}
+
 /**
  * Supabase Database hook.
  *
  * the `data` is returned in object array format.
  * @param from - The table name to operate on.
+ * @param options
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
 export function useDatabase<D extends BaseDatabase>(
-  from: TableKey<D>
+  from: TableKey<D>,
+  options?: UseDatabaseOptions
 ): {
   data: Array<Table<D, TableKey<D>, "Row">>;
   isLoading: boolean;
@@ -46,7 +52,7 @@ export function useDatabase<D extends BaseDatabase>(
  */
 export function useDatabase<D extends BaseDatabase>(
   from: TableKey<D>,
-  options?: { selectSingle: true }
+  options: UseSingleSelect
 ): {
   data: Table<D, TableKey<D>, "Row">;
   isLoading: boolean;
@@ -78,7 +84,7 @@ export function useDatabase<D extends BaseDatabase>(
 export function useDatabase<
   D extends BaseDatabase,
   K extends TableKey<D> = TableKey<D>
->(from: K, options?: UseDatabaseOptions) {
+>(from: K, options: UseDatabaseOptions = { selectSingle: false }) {
   const supabase = useClient<D>();
 
   const { data, isLoading } = useSWR(from as string, (url) =>

@@ -8,7 +8,9 @@ export const fetcher = async <D extends BaseDatabase>(
   url: TableKey<D>,
   client: SupabaseClient<D>,
   options: SWRFetcherOptions
-) => {
+): Promise<
+  Table<D, TableKey<D>, "Row"> | Array<Table<D, TableKey<D>, "Row">>
+> => {
   if (options?.selectSingle) {
     const { data, error } = await client
       .from(url as string)
