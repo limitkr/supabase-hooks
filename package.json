@@ -2,7 +2,7 @@
   "name": "@limitkr/supabase-hooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "React hooks for supabase",
   "author": "YongIn Kim <limitkr99@gmail.com>",
   "homepage": "https://github.com/limitkr/supabase-hooks",
