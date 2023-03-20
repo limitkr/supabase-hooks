@@ -20,9 +20,12 @@ describe("Testing use-database hook", () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <SHProvider supabaseClient={client}>{children}</SHProvider>
     );
-    const { result } = renderHook(() => useDatabase<Database>("posts"), {
-      wrapper,
-    });
+    const { result } = renderHook(
+      () => useDatabase<Database, "posts">("posts"),
+      {
+        wrapper,
+      }
+    );
     const { data } = await result.current
       .insertData("posts", { id: 1 })
       .select()
@@ -36,7 +39,7 @@ describe("Testing use-database hook", () => {
     );
 
     const { result } = renderHook(
-      () => useDatabase<Database>("posts", { selectSingle: true }),
+      () => useDatabase<Database, "posts">("posts", { selectSingle: true }),
       {
         wrapper,
       }
@@ -50,7 +53,7 @@ describe("Testing use-database hook", () => {
       <SHProvider supabaseClient={client}>{children}</SHProvider>
     );
     const { result } = renderHook(
-      () => useDatabase<Database>("posts", { selectSingle: true }),
+      () => useDatabase<Database, "posts">("posts", { selectSingle: true }),
       {
         wrapper,
       }
@@ -68,7 +71,7 @@ describe("Testing use-database hook", () => {
       <SHProvider supabaseClient={client}>{children}</SHProvider>
     );
     const { result } = renderHook(
-      () => useDatabase<Database>("posts", { selectSingle: true }),
+      () => useDatabase<Database, "posts">("posts", { selectSingle: true }),
       {
         wrapper,
       }

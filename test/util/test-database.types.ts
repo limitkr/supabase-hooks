@@ -15,6 +15,23 @@ export interface Database {
           id?: number;
         };
       };
+      comments: {
+        Row: {
+          created_at: string;
+          created_by: string;
+          id: number;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string;
+          id?: number;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string;
+          id?: number;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
