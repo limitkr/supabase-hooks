@@ -15,7 +15,12 @@
     "url": "https://github.com/limitkr/supabase-hooks/issues",
     "email": "limitkr99@gmail.com"
   },
-  "keywords": ["react", "react-hooks", "supabase", "supabase-hooks"],
+  "keywords": [
+    "react",
+    "react-hooks",
+    "supabase",
+    "supabase-hooks"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -46,7 +51,7 @@
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tsup": "^6.6.3",
-    "typescript": "^4.9.5"
+    "typescript": "5.0.0-beta"
   },
   "peerDependencies": {
     "@supabase/postgrest-js": "^1.4.1",
