@@ -29,16 +29,16 @@ interface UseSingleSelect extends UseDatabaseOptions {
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<D extends BaseDatabase>(
-  from: TableKey<D>,
+export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
+  from: K,
   options?: UseDatabaseOptions
 ): {
-  data: Array<Table<D, TableKey<D>, "Row">>;
+  data: Array<Table<D, K, "Row">>;
   isLoading: boolean;
-  insertData: InsertDataFn<D, TableKey<D>>;
-  updateData: UpdateDataFn<D, TableKey<D>>;
-  deleteData: DeleteDataFn<D, TableKey<D>>;
-  upsertData: UpsertDataFn<D, TableKey<D>>;
+  insertData: InsertDataFn<D, K>;
+  updateData: UpdateDataFn<D, K>;
+  deleteData: DeleteDataFn<D, K>;
+  upsertData: UpsertDataFn<D, K>;
 };
 
 /**
@@ -50,16 +50,16 @@ export function useDatabase<D extends BaseDatabase>(
  *
  * @returns Fetched data, loading status, data insertion, deletion, update functions
  */
-export function useDatabase<D extends BaseDatabase>(
-  from: TableKey<D>,
+export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
+  from: K,
   options: UseSingleSelect
 ): {
-  data: Table<D, TableKey<D>, "Row">;
+  data: Table<D, K, "Row">;
   isLoading: boolean;
-  insertData: InsertDataFn<D, TableKey<D>>;
-  updateData: UpdateDataFn<D, TableKey<D>>;
-  deleteData: DeleteDataFn<D, TableKey<D>>;
-  upsertData: UpsertDataFn<D, TableKey<D>>;
+  insertData: InsertDataFn<D, K>;
+  updateData: UpdateDataFn<D, K>;
+  deleteData: DeleteDataFn<D, K>;
+  upsertData: UpsertDataFn<D, K>;
 };
 
 /**
@@ -81,10 +81,10 @@ export function useDatabase<D extends BaseDatabase>(
  * ``
  *
  */
-export function useDatabase<
-  D extends BaseDatabase,
-  K extends TableKey<D> = TableKey<D>
->(from: K, options: UseDatabaseOptions = { selectSingle: false }) {
+export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
+  from: K,
+  options: UseDatabaseOptions = { selectSingle: false }
+) {
   const supabase = useClient<D>();
 
   const { data, isLoading } = useSWR(from as string, (url) =>
