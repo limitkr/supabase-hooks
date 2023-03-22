@@ -56,7 +56,7 @@ import { useDatabase } from "@limitkr/supabase-hooks";
 import type { Database } from "database.types"; // Supabase Database types
 
 export default function MyPage() {
-  const { data: posts, isLoading } = useDatabase<Database>("posts");
+  const { data: posts, isLoading } = useDatabase<Database, "posts">("posts");
   return isLoading ? (
     <div>Loading...</div>
   ) : (
@@ -67,8 +67,15 @@ export default function MyPage() {
     </div>
   );
 }
-
 ```
+
+ # Breaking changes
+
+ From version v1.0.0-beta.6, the second generic type must be put in the `useDatabase` hook to provide the correct type hint. For example:
+
+ ```ts
+ const { data } = useDatabase<Database, "posts">("posts");
+ ```
 
 # Run the Test
 
@@ -99,16 +106,19 @@ Now you can run the test!
 
 # API
 
-## `useClient<T>()`
+## `useClient<D>()`
 
 ```ts
 const useClient = <D extends BaseDatabase>() => ReturnType<typeof createClient<D>>;
 ```
 Returns the Supabase client.
 
-## `useDatabase<T>(from)`
+## `useDatabase<D, K>(from)`
 ```ts
-const useDatabase = <D extends BaseDatabase = any>(from: TableKey<D>, options: UseDatabaseOptions) => {
+const useDatabase = <D extends BaseDatabase = any>(
+  from: TableKey<D>,
+  options: UseDatabaseOptions
+) => {
   return { data, isLoading, insertData, updateData, upsertData, deleteData };
 }
 ```
@@ -122,7 +132,7 @@ You can use filtering in some database methods. For example, to delete data when
 import { useDatabase } from "@limitkr/supabase-hooks";
 
 export default function Example() {
-   const { deleteData } = useDatabase("posts");
+   const { deleteData } = useDatabase<Database, "posts">("posts");
    
    return (
      <button onClick={async () => await deleteData.eq("id", 1)}>Delete</button>
@@ -132,17 +142,21 @@ export default function Example() {
 
 > :warning: In the data fetch(`select`) method, filtering options will be added soon.
 
-### `from: TableKey<D> | string`
+### `from: K extends TableKey<D> | string`
+
 The table name to operate on.
+
 > :information_source: If you use a database type extracted from 'Supabase' into the generic type, you can get a better type hint.
 
 ### `options: UseDatabaseOptions`
+
 ```ts
 interface UseDatabaseOptions {
   selectSingle?: boolean;
 }
 ```
 #### `selectSingle: boolean`
+
 If `true`, one single object type is returned, not an array type. This is the same method as below.
 ```ts
 await supabaseClient.from(/* from */).select().single();
