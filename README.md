@@ -11,6 +11,8 @@ React hooks library for [Supabase](https://github.com/supabase/supabase) ⭐
 4. [API](#api)
    - [useClient](#useclientt)
    - [useDatabase](#usedatabasetfrom)
+   - [unstable_useDatabase](#unstableusedatabasefrom-options)
+
 
 # Install
 
@@ -77,6 +79,22 @@ From version v1.0.0-beta.6, the second generic type must be put in the `useDatab
 ```ts
 const { data } = useDatabase<Database, "posts">("posts");
 ```
+
+# Use unstable feature
+
+> :warning: This feature is still in the experimental stage. 
+> You may experience unintended bugs!
+
+To use the hooks that are currently in development, you can 
+import the exported hooks from the unstable folder.
+This package allows data fetching to be used with filters and uses 
+better type definitions exported from Supabase.
+
+```ts
+import { unstable_useDatabase } from "@limitkr/supabase-hooks/unstable"
+```
+
+Check the [documentation](src/hooks/unstable/README.md).
 
 # Run the Test
 
@@ -170,3 +188,5 @@ If `true`, one single object type is returned, not an array type. This is the sa
 ```ts
 await supabaseClient.from(/* from */).select().single();
 ```
+
+## `unstable_useDatabase(from, options)`
