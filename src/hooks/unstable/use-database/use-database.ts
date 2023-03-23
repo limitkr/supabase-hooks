@@ -1,17 +1,88 @@
 import useSWR from "swr";
 
-import { Database as DB } from "../../../../test/util";
 import useClient from "../../use-client";
-import type { SingleTable, TableName } from "./use-database.types";
+import { fetcher } from "./fetcher";
+import { FilterBuilder, GetTable, GetTableName } from "./filter";
+import type { SingleTable, UseDatabaseOptions } from "./use-database.types";
 
-export function useDatabaseWithFilters<D, K extends TableName<D>>(from: K) {
-  const client = useClient<DB>();
+/**
+ * Supabase database hook. `data` is returned by default as an `Array` type.
+ *
+ * ## Example
+ *
+ * ```ts
+ * const { data } = useDatabase<Database, "posts">("posts");
+ * ```
+ * The `data` will be `Array` type.
+ *
+ * @param from - The table name to operate on.
+ * @param options - Database fetch options.
+ */
+export function useDatabaseWithFilters<
+  D,
+  TableName extends GetTableName<D>,
+  MethodName extends keyof FilterBuilder<
+    GetTable<D, TableName>
+  > = keyof FilterBuilder<GetTable<D, TableName>>
+>(
+  from: TableName,
+  options?: { single: false } & UseDatabaseOptions<D, MethodName>
+): {
+  data: SingleTable<D, TableName>[];
+  isLoading: boolean;
+};
 
-  const { data } = useSWR(from as string, async (url: K) => {
-    const { data, error } = await client.from(url).select();
+/**
+ * Supabase database hook. `data` is returned by default as an single `Object` type.
+ *
+ * This description can be seen when single is set to `true` in the
+ * option parameter.
+ *
+ * ## Example
+ *
+ * ```ts
+ * const { data } = useDatabase<Database, "posts">("posts", { single: true });
+ * ```
+ * The `data` will be single `Object` type.
+ *
+ * @param from The table name to operate on.
+ * @param options - Database fetch options.
+ */
+export function useDatabaseWithFilters<
+  D,
+  TableName extends GetTableName<D>,
+  MethodName extends keyof FilterBuilder<
+    GetTable<D, TableName>
+  > = keyof FilterBuilder<GetTable<D, TableName>>
+>(
+  from: TableName,
+  options: { single: true } & UseDatabaseOptions<D, MethodName>
+): {
+  data: SingleTable<D, TableName>;
+  isLoading: boolean;
+};
 
-    return data as SingleTable<D, K>[];
-  });
+export function useDatabaseWithFilters<
+  D,
+  TableName extends GetTableName<D>,
+  MethodName extends keyof FilterBuilder<
+    GetTable<D, TableName>
+  > = keyof FilterBuilder<GetTable<D, TableName>>
+>(
+  from: TableName,
+  options: UseDatabaseOptions<D, MethodName> = { single: false, select: "*" }
+): {
+  data:
+    | SingleTable<D, TableName>
+    | Array<SingleTable<D, TableName>>
+    | undefined;
+  isLoading: boolean;
+} {
+  const client = useClient<D>();
 
-  return { data };
+  const { data, isLoading } = useSWR(from as string, async (url: TableName) =>
+    fetcher(client, url, options)
+  );
+
+  return { data, isLoading };
 }

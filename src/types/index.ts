@@ -29,9 +29,9 @@ export interface BaseDatabase {
 }
 
 export type SupabaseTables<D extends BaseDatabase> = D["public"]["Tables"];
-type SupabaseViews<D extends BaseDatabase> = D["public"]["Views"];
-type SupabaseFunctions<D extends BaseDatabase> = D["public"]["Functions"];
-type SupabaseEnums<D extends BaseDatabase> = D["public"]["Enums"];
+// type SupabaseViews<D extends BaseDatabase> = D["public"]["Views"];
+// type SupabaseFunctions<D extends BaseDatabase> = D["public"]["Functions"];
+// type SupabaseEnums<D extends BaseDatabase> = D["public"]["Enums"];
 
 export type TableKey<D extends BaseDatabase> = keyof SupabaseTables<D>;
 

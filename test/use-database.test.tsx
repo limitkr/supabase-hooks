@@ -8,7 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import { renderHook, waitFor } from "@testing-library/react";
 import React from "react";
 
-import { SHProvider, useDatabase } from "../dist";
+import { SHProvider, unstable_useDatabase, useDatabase } from "../dist";
 import type { Database } from "./util";
 
 describe("Testing use-database hook", () => {
@@ -46,6 +46,25 @@ describe("Testing use-database hook", () => {
     );
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.data).toHaveProperty("id", 1);
+  });
+
+  test("Get data using filters", async () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SHProvider supabaseClient={client}>{children}</SHProvider>
+    );
+
+    const { result } = renderHook(
+      () =>
+        unstable_useDatabase<Database, "posts", "eq">("posts", {
+          single: true,
+          filter: { op: "eq", args: () => ["id", "2"] },
+        }),
+      {
+        wrapper,
+      }
+    );
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.data).toHaveProperty("id", 2);
   });
 
   test("Update data from use-database hook", async () => {

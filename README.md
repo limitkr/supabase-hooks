@@ -3,13 +3,14 @@
 React hooks library for [Supabase](https://github.com/supabase/supabase) ⭐
 
 # Contents
+
 1. [Install](#install)
 2. [Usage](#usage)
    - [NextJS Example](#nextjs-example)
 3. [Run the Test](#run-the-test)
 4. [API](#api)
-    - [useClient](#useclientt)
-    - [useDatabase](#usedatabasetfrom)
+   - [useClient](#useclientt)
+   - [useDatabase](#usedatabasetfrom)
 
 # Install
 
@@ -69,13 +70,13 @@ export default function MyPage() {
 }
 ```
 
- # Breaking changes
+# Breaking changes
 
- From version v1.0.0-beta.6, the second generic type must be put in the `useDatabase` hook to provide the correct type hint. For example:
+From version v1.0.0-beta.6, the second generic type must be put in the `useDatabase` hook to provide the correct type hint. For example:
 
- ```ts
- const { data } = useDatabase<Database, "posts">("posts");
- ```
+```ts
+const { data } = useDatabase<Database, "posts">("posts");
+```
 
 # Run the Test
 
@@ -84,12 +85,13 @@ read the description below if you want to run the test.
 
 ## Setup
 
-At the root of the project, create a *.jest* folder. You can also create it with the command below:
+At the root of the project, create a _.jest_ folder. You can also create it with the command below:
 
 ```shell
 mkdir .jest
 ```
-And then create the *setEnvVar.js* file in the folder. assign the env variables in the *setEnvVar.js*.
+
+And then create the _setEnvVar.js_ file in the folder. assign the env variables in the _setEnvVar.js_.
 
 ```js
 // .jest/setEnvVar.js
@@ -109,34 +111,39 @@ Now you can run the test!
 ## `useClient<D>()`
 
 ```ts
-const useClient = <D extends BaseDatabase>() => ReturnType<typeof createClient<D>>;
+const useClient = <D extends BaseDatabase>() =>
+  ReturnType<typeof createClient<D>>;
 ```
+
 Returns the Supabase client.
 
 ## `useDatabase<D, K>(from)`
+
 ```ts
 const useDatabase = <D extends BaseDatabase = any>(
   from: TableKey<D>,
   options: UseDatabaseOptions
 ) => {
   return { data, isLoading, insertData, updateData, upsertData, deleteData };
-}
+};
 ```
-Returns 4 Supabase database methods: `insert`, `update`, `delete`, `upsert`. Returns 2 Variables: 
+
+Returns 4 Supabase database methods: `insert`, `update`, `delete`, `upsert`. Returns 2 Variables:
 
 - `isLoading` - Variable that indicate whether data is being loaded.
 - `data` - fetched data that Select a table using the 'key' value defined in the `from` parameter.
 
 You can use filtering in some database methods. For example, to delete data when a specific ID matches:
+
 ```tsx
 import { useDatabase } from "@limitkr/supabase-hooks";
 
 export default function Example() {
-   const { deleteData } = useDatabase<Database, "posts">("posts");
-   
-   return (
-     <button onClick={async () => await deleteData.eq("id", 1)}>Delete</button>
-   )
+  const { deleteData } = useDatabase<Database, "posts">("posts");
+
+  return (
+    <button onClick={async () => await deleteData.eq("id", 1)}>Delete</button>
+  );
 }
 ```
 
@@ -155,9 +162,11 @@ interface UseDatabaseOptions {
   selectSingle?: boolean;
 }
 ```
+
 #### `selectSingle: boolean`
 
 If `true`, one single object type is returned, not an array type. This is the same method as below.
+
 ```ts
 await supabaseClient.from(/* from */).select().single();
 ```
