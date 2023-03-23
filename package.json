@@ -2,14 +2,19 @@
   "name": "@limitkr/supabase-hooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.0-beta.6",
+  "type": "module",
+  "version": "1.0.0-beta.7",
   "description": "React hooks for supabase",
   "author": "YongIn Kim <limitkr99@gmail.com>",
   "homepage": "https://github.com/limitkr/supabase-hooks",
   "scripts": {
-    "build": "rm -rf dist && tsup src/index.ts --treeshake --minify --format esm,cjs --dts --external react",
+    "build": "rm -rf dist && tsup --config tsup.config.ts",
     "dev": "concurrently \"tsup src/index.ts --format esm,cjs --dts --external react --watch\"",
     "clean": "rm -rf dist"
+  },
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./unstable/": "./dist/src/unstable/"
   },
   "bugs": {
     "url": "https://github.com/limitkr/supabase-hooks/issues",

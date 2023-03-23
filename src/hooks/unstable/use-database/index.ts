@@ -1,1 +1,1 @@
-export {};
+export { useDatabaseWithFilters } from "./use-database";
