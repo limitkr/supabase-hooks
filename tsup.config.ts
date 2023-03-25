@@ -12,7 +12,7 @@ export default defineConfig({
   treeshake: true,
   minify: true,
   dts: true,
-  format: ["esm"],
+  format: ["esm", "cjs"],
   outDir: "dist",
   esbuildOptions(options, context) {
     options.outbase = "./";

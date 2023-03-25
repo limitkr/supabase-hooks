@@ -3,7 +3,7 @@ import type { GenericSchema } from "@supabase/supabase-js/src/lib/types";
 import type { SWRFetcherOptions } from "./fetcher";
 import type { FilterMethod } from "./filter";
 
-export type UseDatabaseOptions<D, F extends FilterMethod> = Exclude<
+export type UseDatabaseOptions<D, F extends FilterMethod<D>> = Exclude<
   SWRFetcherOptions<D, F>,
   "single"
 >;
