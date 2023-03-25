@@ -8,7 +8,7 @@ import type {
 } from "./filter";
 import type { Query, SingleTable, TableName } from "./use-database.types";
 
-export interface SWRFetcherOptions<D, F extends FilterMethod> {
+export interface SWRFetcherOptions<D, F extends FilterMethod<D>> {
   select?: Query<D> & string;
   single?: boolean;
   filter?: {
@@ -20,7 +20,7 @@ export interface SWRFetcherOptions<D, F extends FilterMethod> {
 export const fetcher = async <
   D,
   K extends TableName<D>,
-  F extends FilterMethod
+  F extends FilterMethod<D>
 >(
   client: SupabaseClient<D>,
   url: K,
@@ -29,14 +29,12 @@ export const fetcher = async <
   const { single, select, filter } = options;
   if (single) {
     if (filter?.op) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const { data, error } = await client
         .from(url as string)
         .select(select)
-        [filter.op](
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          ...filter.args()
-        )
+        [filter.op](...filter.args())
         .single();
 
       if (error) {
