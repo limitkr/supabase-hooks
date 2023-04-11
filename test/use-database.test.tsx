@@ -100,4 +100,18 @@ describe("Testing use-database hook", () => {
 
     expect(error).toBe(null);
   });
+
+  test("Do not fetch data if `disableFetch` option set to `true`", async () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SHProvider supabaseClient={client}>{children}</SHProvider>
+    );
+    const { result } = renderHook(
+      () => useDatabase<Database, "posts">("posts", { disableFetch: true }),
+      {
+        wrapper,
+      }
+    );
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.data).toEqual(undefined);
+  });
 });

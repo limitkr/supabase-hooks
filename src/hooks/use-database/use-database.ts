@@ -61,6 +61,28 @@ export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
 /**
  * Supabase Database hook.
  *
+ * If `disableFetch` is set to `true` for the options' parameter, the useDatabase hook does not automatically fetch data.
+ * This is useful if you want to use the useDatabase hook for data insertion or delete methods.
+ * @param from - The table name to operate on.
+ * @param options - Database fetch options.
+ *
+ * @returns Fetched data, data insertion, deletion, update functions
+ */
+export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
+  from: K,
+  options: { disableFetch: true } & UseDatabaseOptions
+): {
+  data?: undefined;
+  isLoading?: boolean;
+  insertData: InsertDataFn<D, K>;
+  updateData: UpdateDataFn<D, K>;
+  deleteData: DeleteDataFn<D, K>;
+  upsertData: UpsertDataFn<D, K>;
+};
+
+/**
+ * Supabase Database hook.
+ *
  * If `selectSingle` is set to `true` for the options' parameter, the `data` is returned in single object format.
  * @param from - The table name to operate on.
  * @param options - Database fetch options.
@@ -84,7 +106,7 @@ export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
   const supabase = useClient<D>();
 
   const { data, isLoading } = useSWR(
-    () => (options.disableFetch ? (from as string) : null),
+    !options.disableFetch ? (from as string) : null,
     (url) => fetcher<D>(url, supabase, { selectSingle: options?.selectSingle })
   );
 
