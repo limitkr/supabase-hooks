@@ -2,7 +2,7 @@
   "name": "@limitkr/supabase-hooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "React hooks for supabase",
   "author": "YongIn Kim <limitkr99@gmail.com>",
   "homepage": "https://github.com/limitkr/supabase-hooks",
@@ -12,8 +12,8 @@
     "clean": "rm -rf dist"
   },
   "exports": {
-    ".": "./dist/src/index.js",
-    "./unstable/": "./dist/src/unstable/"
+    ".": "./dist/index.js",
+    "./unstable/": "./dist/unstable/"
   },
   "bugs": {
     "url": "https://github.com/limitkr/supabase-hooks/issues",

@@ -83,12 +83,13 @@ export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
  */
 export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
   from: K,
-  options: UseDatabaseOptions = { selectSingle: false }
+  options: UseDatabaseOptions = { selectSingle: false, disableFetch: false }
 ) {
   const supabase = useClient<D>();
 
-  const { data, isLoading } = useSWR(from as string, (url) =>
-    fetcher<D>(url, supabase, { selectSingle: options?.selectSingle })
+  const { data, isLoading } = useSWR(
+    () => (options.disableFetch ? (from as string) : null),
+    (url) => fetcher<D>(url, supabase, { selectSingle: options?.selectSingle })
   );
 
   const insertData = (

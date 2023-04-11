@@ -178,10 +178,12 @@ The table name to operate on.
 ```ts
 interface UseDatabaseOptions {
   selectSingle?: boolean;
+  disableFetch?: boolean;
 }
 ```
 
 #### `selectSingle: boolean`
+default: `false`
 
 If `true`, one single object type is returned, not an array type. This is the same method as below.
 
@@ -189,4 +191,9 @@ If `true`, one single object type is returned, not an array type. This is the sa
 await supabaseClient.from(/* from */).select().single();
 ```
 
-## `unstable_useDatabase(from, options)`
+#### `disableFetch: boolean`
+
+default: `false`
+
+If `true`, the `useDatabase` hook does not automatically fetch data. This is useful if you want to use the 
+`useDatabase` hook for data insertion or delete methods.
