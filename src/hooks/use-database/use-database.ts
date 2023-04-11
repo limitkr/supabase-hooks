@@ -16,10 +16,6 @@ import type {
   UseDatabaseOptions,
 } from "./use-database.types";
 
-interface UseSingleSelect extends UseDatabaseOptions {
-  selectSingle: true;
-}
-
 /**
  * Supabase Database hook.
  *
@@ -31,7 +27,7 @@ interface UseSingleSelect extends UseDatabaseOptions {
  */
 export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
   from: K,
-  options?: UseDatabaseOptions
+  options?: { selectSingle: false } & UseDatabaseOptions
 ): {
   data: Array<Table<D, K, "Row">>;
   isLoading: boolean;
@@ -52,7 +48,7 @@ export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
  */
 export function useDatabase<D extends BaseDatabase, K extends TableKey<D>>(
   from: K,
-  options: UseSingleSelect
+  options: { selectSingle: true } & UseDatabaseOptions
 ): {
   data: Table<D, K, "Row">;
   isLoading: boolean;

@@ -8,7 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 import { renderHook, waitFor } from "@testing-library/react";
 import React from "react";
 
-import { SHProvider, useDatabase } from "../dist";
+import { SHProvider, useDatabase } from "../src";
 import { unstable_useDatabase } from "../dist/unstable";
 import type { Database } from "./util";
 
